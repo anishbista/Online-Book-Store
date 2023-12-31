@@ -26,7 +26,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                            <a class="nav-link" href="{% url 'index' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Books</a>
@@ -40,8 +40,8 @@
                     </ul>
                 </div>
 
-                <form class="d-flex mx-3">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex mx-3" method ="GET" action={% url 'index' %}>
+                    <input class="form-control me-2" type="search" name="title" placeholder="Search" aria-label="Search by title">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
 

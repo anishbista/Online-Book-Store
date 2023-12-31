@@ -24,6 +24,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),  # new
     path("accounts/", include("django.contrib.auth.urls")),  # new
-    path("", include("pages.urls")),
+    path("", include("bookstore.urls")),
     path("books/", include("bookstore.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
