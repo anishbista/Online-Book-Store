@@ -1,5 +1,25 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Set minimum height to full viewport height */
+    margin: 0;
+}
+
+main {
+    flex: 1;
+    /* Allow the main content area to take remaining space */
+}
+
 footer {
-    position: absolute;
+    position: relative;
     bottom: 0;
     width: 100%;
+}
+
+.card-img-top {
+    height: 300px;
+    /* Adjust the height as needed */
+    object-fit: cover;
+    /* Ensure images fit within the specified height */
 }

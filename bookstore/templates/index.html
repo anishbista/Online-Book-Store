@@ -1,0 +1,51 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+
+{% block title %}Bookstore - All Books{% endblock title %}
+
+{% block content %}
+    <!-- Filter section -->
+    <div class="container mb-4">
+        <h2>Filter by Genre</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <form method="GET" action="">
+                    <select class="form-select" name="genre" aria-label="Category" onchange="this.form.submit()">
+                        <option value="">All Genre</option>
+                        {% for genre_value, genre_name in genres %}
+                        <option value="{{ genre_value }}" {% if request.GET.genre == genre_value %}selected{% endif %}>
+                            {{ genre_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <!-- Add more filters if required -->
+        </div>
+    </div>
+
+    <!-- Book display section -->
+    <div class="container">
+        <h2>All Books</h2>
+        <div class="row">
+            {% for book in book_list %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="{{ book.image.url }}" class="card-img-top img-fluid" alt="Book Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text">
+                            <strong>Author:</strong> {{ book.author }}<br>
+                            <strong>Genre:</strong> {{ book.genre }}<br>
+                            <strong>Price:</strong> ${{ book.price }}
+                        </p>
+                        <p class="card-text">{{ book.description | truncatechars:100 }}</p>
+                        <!-- Adjust 'truncatechars:100' to limit description length -->
+                        <a href="#" class="btn btn-primary">Add to cart</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
