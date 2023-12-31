@@ -21,12 +21,19 @@ class Book(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    items = models.ManyToManyField(Book)
+
+    def __str__(self):
+        return self.user.username
+
+
+class CartItem(models.Model):
+    Cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    books = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return self.user
+        return f"{self.books.title} in Cart ({self.quantity})"
