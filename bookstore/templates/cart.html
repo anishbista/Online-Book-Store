@@ -10,22 +10,28 @@
             <!-- Cart items -->
             <!-- Sample cart item -->
             <div class="col-md-8">
+                {% if cart_items %}
+                {% for item  in cart_items  %}
                 <div class="card mb-3">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src="{% static 'images/book1.jpg' %}" class="img-fluid rounded-start" alt="Book Image">
+                            <img src="{{item.books.image.url}}" class="img-fluid rounded-start" alt="Book Image">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title">Book Title</h5>
-                                <p class="card-text">Book Description</p>
-                                <p class="card-text">Quantity: 1</p>
-                                <p class="card-text"><small class="text-muted">$19.99</small></p>
+                                <h5 class="card-title">{{item.books.title}}</h5>
+                                <p class="card-text">{{item.books.description}}</p>
+                                <p class="card-text">Quantity: {{item.quantity}}</p>
+                                <p class="card-text"><small class="text-muted">${{item.books.price}}</small></p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Repeat this structure for more cart items -->
+                {% endfor %}
+                {% else %}
+                    <p>Your cart is empty</p>
+                {% endif %}
             </div>
             
             <!-- Cart summary -->
@@ -33,8 +39,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Cart Summary</h5>
-                        <p class="card-text">Total Items: 1</p>
-                        <p class="card-text">Total Price: $19.99</p>
+                        <p class="card-text">Total Items: {{total_items}}</p>
+                        <p class="card-text">Total Price: ${{total_price}}</p>
                         <a href="#" class="btn btn-primary">Proceed to Checkout</a>
                     </div>
                 </div>

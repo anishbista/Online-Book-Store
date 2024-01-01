@@ -1,4 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from .models import Book, Cart, CartItem
@@ -41,3 +43,27 @@ class BookDetailView(DetailView):
         if not item_created:
             cart_item.quantity += 1
             cart_item.save()
+
+        return HttpResponseRedirect(reverse("cart_item"))
+
+
+class CartView(ListView):
+    model = CartItem
+    template_name = "cart.html"
+    context_object_name = "cart_items"
+
+    def get_queryset(self):
+        user_cart = Cart.objects.get(user=self.request.user)
+        print(user_cart)
+        return CartItem.objects.filter(cart=user_cart)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_items = self.get_queryset()
+        total_items = cart_items.count()
+        total_price = sum(item.books.price * item.quantity for item in cart_items)
+
+        context["total_items"] = total_items
+        context["total_price"] = total_price
+
+        return context

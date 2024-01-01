@@ -41,12 +41,12 @@
                 </div>
 
                 <form class="d-flex mx-3" method ="GET" action={% url 'index' %}>
-                    <input class="form-control me-2" type="search" name="title" placeholder="Search" aria-label="Search by title">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search by title">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
 
                 <div class="d-flex align-items-center">
-                    <a href="#" class="me-3">
+                    <a href="{% url 'cart_item' %}" class="me-3">
                         <i class="fas fa-shopping-cart"></i>
                     </a>
                 </div>
