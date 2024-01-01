@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 from django.conf import settings
 
@@ -20,6 +21,9 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse("book_detail", kwargs={"pk": self.pk})
+
 
 class Cart(models.Model):
     user = models.OneToOneField(
@@ -32,7 +36,7 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    Cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     books = models.ForeignKey(Book, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
 
