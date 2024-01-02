@@ -1,6 +1,8 @@
 <!-- templates/detail.html -->
 {% extends 'base.html' %}
 
+{% load social_share %}
+
 {% block title %}
     {{ object.title }} - Bookstore
 {% endblock title %}
@@ -20,6 +22,30 @@
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary">Add to Cart</button>
             </form>
+            <div class = "col-md-6 mt-4">
+                <p >Share on Social Media:</p>
+                
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-facebook-square"></i> 
+                </a>
+                <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20book:%20{{ object.title }}&url={{ request.build_absolute_uri }}" class="btn btn-info" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-twitter-square"></i> 
+                </a>
+                <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}&title={{ object.title }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-linkedin"></i> 
+                </a>
+            </div>
+
+            <div class = "social-sharing col-md-6 mt-4">
+                <h3>Share on Social Media:</h3>
+                {% post_to_facebook "Book:{{object.title}} Check it out!" object_or_url "Post to Facebook"%}
+                {% post_to_twitter "Book:{{object.title}}. Check it out!" object_or_url %}
+                {% post_to_linkedin "Book:{{object.title}}. Check it out!" object_or_url %}
+            </div>
+
+            
+            
+
         </div>
         
     </div>

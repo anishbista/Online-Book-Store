@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # 3rd Party
-    "crispy_forms",  # new
-    "crispy_bootstrap5",  # ne
+    "crispy_forms",
+    "crispy_bootstrap5",
     "accounts",
     "pages",
     "bookstore",
+    "django_social_share",
 ]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
