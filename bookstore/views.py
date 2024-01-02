@@ -41,15 +41,26 @@ class BookDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         book = self.get_object()
-        user_cart, created = Cart.objects.get_or_create(user=request.user)
-        cart_item, item_created = CartItem.objects.get_or_create(
-            cart=user_cart, books=book
-        )
-        if not item_created:
-            cart_item.quantity += 1
-            cart_item.save()
 
-        return HttpResponseRedirect(reverse("cart_item"))
+        if "add_to_cart" in request.POST:
+            print(book)
+            user_cart, created = Cart.objects.get_or_create(user=request.user)
+            cart_item, item_created = CartItem.objects.get_or_create(
+                cart=user_cart, books=book
+            )
+            if not item_created:
+                cart_item.quantity += 1
+                cart_item.save()
+            return HttpResponseRedirect(reverse("cart_item"))
+        elif "add_to_wishlist" in request.POST:
+            user_wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+            print(created)
+            wishlist_item, item_created = WishlistItem.objects.get_or_create(
+                wishlist=user_wishlist, books=book
+            )
+            return HttpResponseRedirect(reverse("wishlist"))
+
+        return HttpResponseRedirect(reverse("book_detail", kwargs={"pk": book.pk}))
 
 
 class CartView(LoginRequiredMixin, ListView):
@@ -114,11 +125,7 @@ class WishlistView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         try:
             user_wishlist = Wishlist.objects.get(user=self.request.user)
-            print(user_wishlist)
-            books = WishlistItem.objects.filter(wishlist=user_wishlist)
-            print(books)
-            for book in books:
-                print(book.books.title)
+
         except ObjectDoesNotExist:
             user_wishlist = Wishlist.objects.create(user=self.request.user)
 

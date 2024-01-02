@@ -23,3 +23,4 @@ class WishlistAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Book)
+admin.site.register(BookReview)

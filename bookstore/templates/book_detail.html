@@ -18,10 +18,13 @@
             <p><strong>Genre:</strong> {{ object.genre }}</p>
             <p><strong>Price:</strong> ${{ object.price }}</p>
             <p><strong>Description:</strong> {{ object.description }}</p>
-            <form method="post" action="">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
-            </form>
+            
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary" name = "add_to_cart" >Add to Cart</button>
+                    <button type="submit" class="btn btn-primary" name = "add_to_wishlist" >Add to Wishlist</button>
+                </form>
+           
             <div class = "col-md-6 mt-4">
                 <p >Share on Social Media:</p>
                 
