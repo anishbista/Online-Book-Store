@@ -1,0 +1,38 @@
+<!-- templates/wishlist.html -->
+{% extends 'base.html' %}
+
+{% block title %}My Wishlist{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <h2>My Wishlist</h2>
+        {% if user.is_authenticated %}
+            {% if wishlist %}
+                <ul>
+                    {% for item in wishlist %}
+                    <div class="card mb-3" style="width: 45rem;">
+                        <div class="row g-0">
+                            <div class="col-md-1">
+                                <img src="{{item.books.image.url}}" class="img-fluid rounded-start" id="wishlist" alt="Book Image">
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{item.books.title}}</h5>
+                                    <h5 class="card-title">{{item.books.author}}</h5>
+                                    
+                                    
+                                    <p class="card-text"><small class="text-muted">${{item.books.price}}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Your wishlist is empty.</p>
+            {% endif %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to view your wishlist.</p>
+        {% endif %}
+    </div>
+{% endblock content %}

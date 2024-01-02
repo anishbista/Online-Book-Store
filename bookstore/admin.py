@@ -12,4 +12,14 @@ class CartAdmin(admin.ModelAdmin):
     inlines = (CartItemInline,)
 
 
+class WishlistInLine(admin.TabularInline):
+    model = WishlistItem
+    extra = 1
+
+
+@admin.register(Wishlist)
+class WishlistAdmin(admin.ModelAdmin):
+    inlines = (WishlistInLine,)
+
+
 admin.site.register(Book)

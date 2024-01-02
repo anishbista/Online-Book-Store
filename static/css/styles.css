@@ -17,6 +17,13 @@ footer {
     width: 100%;
 }
 
+#wishlist {
+    height: 100px;
+    /* Adjust the height as needed */
+    object-fit: cover;
+
+}
+
 .card-img-top {
     height: 300px;
     /* Adjust the height as needed */

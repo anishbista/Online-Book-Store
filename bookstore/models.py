@@ -42,3 +42,21 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.books.title} in Cart ({self.quantity})"
+
+
+class Wishlist(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.user.username
+
+
+class WishlistItem(models.Model):
+    wishlist = models.ForeignKey(Wishlist, on_delete=models.CASCADE)
+    books = models.ForeignKey(Book, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return ""

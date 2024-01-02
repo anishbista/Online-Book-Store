@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-from .models import Book, Cart, CartItem
+from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 
@@ -104,3 +104,22 @@ class OTPConfirmation(View):
         else:
             error_message = "Invalid OTP. Please try again."
             return render(request, "otp_entry.html", {"error_message": error_message})
+
+
+class WishlistView(LoginRequiredMixin, ListView):
+    model = WishlistItem
+    template_name = "wishlist.html"
+    context_object_name = "wishlist"
+
+    def get_queryset(self):
+        try:
+            user_wishlist = Wishlist.objects.get(user=self.request.user)
+            print(user_wishlist)
+            books = WishlistItem.objects.filter(wishlist=user_wishlist)
+            print(books)
+            for book in books:
+                print(book.books.title)
+        except ObjectDoesNotExist:
+            user_wishlist = Wishlist.objects.create(user=self.request.user)
+
+        return WishlistItem.objects.filter(wishlist=user_wishlist)
