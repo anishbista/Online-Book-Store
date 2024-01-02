@@ -1,9 +1,13 @@
+import random
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from .models import Book, Cart, CartItem
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.mail import send_mail
 
 
 class BookListView(ListView):
@@ -47,7 +51,7 @@ class BookDetailView(DetailView):
         return HttpResponseRedirect(reverse("cart_item"))
 
 
-class CartView(ListView):
+class CartView(LoginRequiredMixin, ListView):
     model = CartItem
     template_name = "cart.html"
     context_object_name = "cart_items"
@@ -67,3 +71,30 @@ class CartView(ListView):
         context["total_price"] = total_price
 
         return context
+
+    def post(self, request):
+        otp = random.randint(1000, 9999)
+        user_email = request.user.email
+        send_mail(
+            "OTP for Checkout",
+            f"Your OTP for checkout is :{otp}",
+            "anishbista9237@gmail.com",
+            [user_email],
+            fail_silently=False,
+        )
+
+        request.session["checkout_otp"] = otp
+        return render(request, "otp_entry.html")
+
+
+class OTPConfirmation(View):
+    def post(self, request):
+        submitted_otp = request.POST.get("otp")
+        stored_otp = request.session.get("checkout_otp")
+
+        if submitted_otp and stored_otp and int(submitted_otp) == stored_otp:
+            del request.session["checkout_otp"]
+            return render(request, "checkout_success.html")
+        else:
+            error_message = "Invalid OTP. Please try again."
+            return render(request, "otp_entry.html", {"error_message": error_message})

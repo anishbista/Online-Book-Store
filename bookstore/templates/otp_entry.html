@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}OTP Confirmation - Bookstore{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <h2>Enter OTP</h2>
+        {% if error_message %}
+        <p>{{error_message}}</p>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form action="{% url 'otp_confirmation' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="otpInput" class="form-label">Enter OTP</label>
+                        <input type="text" class="form-control" id="otpInput" name="otp" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit OTP</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

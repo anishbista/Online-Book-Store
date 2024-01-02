@@ -41,7 +41,11 @@
                         <h5 class="card-title">Cart Summary</h5>
                         <p class="card-text">Total Items: {{total_items}}</p>
                         <p class="card-text">Total Price: ${{total_price}}</p>
-                        <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            
+                            <button class="btn btn-success" type="submit">Proceed to Checkout</button>
+                        </form>
                     </div>
                 </div>
             </div>
