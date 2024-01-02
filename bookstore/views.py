@@ -1,5 +1,6 @@
 import random
 from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import View
@@ -57,15 +58,17 @@ class CartView(LoginRequiredMixin, ListView):
     context_object_name = "cart_items"
 
     def get_queryset(self):
-        user_cart = Cart.objects.get(user=self.request.user)
-        print(user_cart)
+        try:
+            user_cart = Cart.objects.get(user=self.request.user)
+        except ObjectDoesNotExist:
+            user_cart = Cart.objects.create(user=self.request.user)
         return CartItem.objects.filter(cart=user_cart)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = self.get_queryset()
-        total_items = cart_items.count()
-        total_price = sum(item.books.price * item.quantity for item in cart_items)
+
+        total_items = self.object_list.count()
+        total_price = sum(item.books.price * item.quantity for item in self.object_list)
 
         context["total_items"] = total_items
         context["total_price"] = total_price
@@ -84,10 +87,13 @@ class CartView(LoginRequiredMixin, ListView):
         )
 
         request.session["checkout_otp"] = otp
-        return render(request, "otp_entry.html")
+        return redirect("otp_confirmation")
 
 
 class OTPConfirmation(View):
+    def get(self, request):
+        return render(request, "otp_entry.html")
+
     def post(self, request):
         submitted_otp = request.POST.get("otp")
         stored_otp = request.session.get("checkout_otp")
