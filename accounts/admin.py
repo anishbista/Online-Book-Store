@@ -13,6 +13,7 @@ class CustomUserAdmin(UserAdmin):
         "username",
         "phone_number",
         "address",
+        "order_count",
         "is_staff",
     ]
     fieldsets = UserAdmin.fieldsets + (
@@ -22,6 +23,7 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "address",
                     "phone_number",
+                    "order_count",
                 )
             },
         ),
@@ -33,6 +35,7 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "address",
                     "phone_number",
+                    "order_count",
                 )
             },
         ),

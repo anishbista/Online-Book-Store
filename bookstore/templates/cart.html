@@ -40,7 +40,17 @@
                     <div class="card-body">
                         <h5 class="card-title">Cart Summary</h5>
                         <p class="card-text">Total Items: {{total_items}}</p>
+                        {% if discounted_price %}
+                        <p class="card-text">Previous Price: ${{total_price}}</p>
+                        <p class="card-text"><i>Note: After 25% discount (For ordering 5 times)</i> 
+                            </p>
+                        <p class="card-text">Total Price: ${{discounted_price}}</p>
+                        {% else %}
                         <p class="card-text">Total Price: ${{total_price}}</p>
+                        {% endif %}
+
+                        
+
                         <form action="" method="post">
                             {% csrf_token %}
                             

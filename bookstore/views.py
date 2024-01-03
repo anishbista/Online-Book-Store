@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.contrib import messages
 from .forms import BookReviewForm
 from .models import *
+from accounts.models import CustomUser
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
 
@@ -44,12 +45,14 @@ class BookDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         book = self.get_object()
         form = BookReviewForm()
+
         # review, created = BookReview.objects.get_or_create(book=book, user=request.user)
         context = {
             "object": book,
             "form": form,
             # "review": review,
         }
+
         return render(request, "book_detail.html", context)
 
     def post(self, request, *args, **kwargs):
@@ -111,8 +114,13 @@ class CartView(LoginRequiredMixin, ListView):
 
         total_items = self.object_list.count()
         total_price = sum(item.books.price * item.quantity for item in self.object_list)
-
         context["total_items"] = total_items
+
+        if self.request.user.order_count == 5:
+            discount_price = float(total_price) - ((25 / 100) * float(total_price))
+
+            context["discounted_price"] = discount_price
+
         context["total_price"] = total_price
 
         return context
@@ -153,8 +161,22 @@ class CreateOrder(View):
         user_cart = get_object_or_404(Cart, user=request.user)
         cart_items = CartItem.objects.filter(cart=user_cart)
         total_price = sum(item.books.price * item.quantity for item in cart_items)
+        user = get_object_or_404(CustomUser, username=request.user.username)
 
-        order = Order.objects.create(user=request.user, total_price=total_price)
+        discount_applied = False
+        if user.order_count == 5:
+            discount_price = float(total_price) - (0.25 * float(total_price))
+            discount_applied = True
+        else:
+            discount_price = total_price
+
+        order = Order.objects.create(user=request.user, total_price=discount_price)
+
+        if discount_applied:
+            user.order_count = 0
+        else:
+            user.order_count += 1
+        user.save()
 
         for item in cart_items:
             OrderItem.objects.create(
@@ -164,6 +186,7 @@ class CreateOrder(View):
                 price=item.books.price * item.quantity,
             )
         user_cart.cartitem_set.all().delete()
+
         return render(request, "checkout_success.html")
 
 
