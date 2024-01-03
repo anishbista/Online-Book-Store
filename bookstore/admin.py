@@ -38,7 +38,6 @@ class BookReviewAdmin(admin.ModelAdmin):
     list_display = ["book", "user", "rating"]
 
 
-admin.site.register(Book)
-# admin.site.register(BookReview)
-# admin.site.register(Order)
-# admin.site.register(OrderItem)
+@admin.register(Book)
+class BookAdmin(admin.ModelAdmin):
+    list_display = ["title", "author", "avg_rating"]

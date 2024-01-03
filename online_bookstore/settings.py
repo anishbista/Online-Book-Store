@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from celery.schedules import crontab
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,6 +138,21 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_BEAT_SCHEDULE = {
+    "send-weekly-notification": {
+        "task": "bookstore.tasks.send_highlighted_book_notification",
+        "schedule": crontab(day_of_week="wednesday", hour=15, minute=56),
+    }
+}
+
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_HOST = "sandbox.smtp.mailtrap.io"
@@ -149,3 +164,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "anishbista9237@gmail.com"
 EMAIL_HOST_PASSWORD = "pkqg mquc chxq ncry"
+
+
+TIME_ZONE = "Asia/Kathmandu"

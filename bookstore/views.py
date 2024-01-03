@@ -1,10 +1,10 @@
 import random
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.db.models import Q
 from django.contrib import messages
 from .forms import BookReviewForm
