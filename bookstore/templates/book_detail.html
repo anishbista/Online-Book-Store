@@ -12,6 +12,7 @@
     <div class="row">
         <div class="col-md-6">
             <img src="{{ object.image.url }}" alt="{{ object.title }}" class="img-fluid">
+            <h4>Average Rating: {{object.avg_rating}} <i class="fas fa-star"></i></h4>
 
             <div class = "col-md-6 mt-4">
                 <p >Share on Social Media:</p>
@@ -50,19 +51,21 @@
                 <button type="submit" class="btn btn-primary">Submit Review</button>
             </form>
             
-            {% comment %} <div class="mt-5">
+            <div class="mt-5">
+                
                 <h3>Other Reviews</h3>
                 {% if object.reviews.count > 0 %}
                     <ul>
                         {% for review in object.reviews.all %}
                             <li>
-                                <strong>{{ review.user.username }}</strong> - {{ review.comment }}
+                                <strong>{{ review.user.username }}</strong> - {{review.rating}} <i class="fas fa-star"></i>
+                                    <p>{{ review.review_text }}</p>
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
                     <p>No reviews yet. Be the first to review!</p>
-                {% endif %} {% endcomment %}
+                {% endif %} 
             </div>
             
 

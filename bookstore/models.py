@@ -25,8 +25,8 @@ class Book(models.Model):
     )
 
     def update_avg_rating(self):
-        total_rating = sum(review.rating for review in self.bookreview_set.all())
-        num_reviews = self.bookreview_set.count()
+        total_rating = sum(review.rating for review in self.reviews.all())
+        num_reviews = self.reviews.count()
 
         if num_reviews > 0:
             self.avg_rating = total_rating / num_reviews
@@ -111,7 +111,7 @@ class BookReview(models.Model):
         (4, "Four star"),
         (5, "Five star"),
     ]
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.IntegerField(choices=RATING_CHOICES)
     review_text = models.TextField()
