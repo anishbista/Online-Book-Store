@@ -1,5 +1,6 @@
 <!-- templates/detail.html -->
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% load social_share %}
 
@@ -11,20 +12,7 @@
     <div class="row">
         <div class="col-md-6">
             <img src="{{ object.image.url }}" alt="{{ object.title }}" class="img-fluid">
-        </div>
-        <div class="col-md-6">
-            <h2>{{ object.title }}</h2>
-            <p><strong>Author:</strong> {{ object.author }}</p>
-            <p><strong>Genre:</strong> {{ object.genre }}</p>
-            <p><strong>Price:</strong> ${{ object.price }}</p>
-            <p><strong>Description:</strong> {{ object.description }}</p>
-            
-                <form method="post" action="">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary" name = "add_to_cart" >Add to Cart</button>
-                    <button type="submit" class="btn btn-primary" name = "add_to_wishlist" >Add to Wishlist</button>
-                </form>
-           
+
             <div class = "col-md-6 mt-4">
                 <p >Share on Social Media:</p>
                 
@@ -41,6 +29,40 @@
                 {% post_to_facebook "Book:{{object.title}} Check it out!" object_or_url "Post to Facebook"%}
                 {% post_to_twitter "Book:{{object.title}}. Check it out!" object_or_url %}
                 {% post_to_linkedin "Book:{{object.title}}. Check it out!" object_or_url %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2>{{ object.title }}</h2>
+            <p><strong>Author:</strong> {{ object.author }}</p>
+            <p><strong>Genre:</strong> {{ object.genre }}</p>
+            <p><strong>Price:</strong> ${{ object.price }}</p>
+            <p><strong>Description:</strong> {{ object.description }}</p>
+
+            <form method="post" action="">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" name = "add_to_cart" >Add to Cart</button>
+                <button type="submit" class="btn btn-primary" name = "add_to_wishlist" >Add to Wishlist</button>
+            </form>
+            <h3 class="mt-5">Drop Your Review</h3>
+            <form method="post" action="{% url 'book_review' object.pk %}" >
+                {% csrf_token %}
+                {{form|crispy}}
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+            
+            {% comment %} <div class="mt-5">
+                <h3>Other Reviews</h3>
+                {% if object.reviews.count > 0 %}
+                    <ul>
+                        {% for review in object.reviews.all %}
+                            <li>
+                                <strong>{{ review.user.username }}</strong> - {{ review.comment }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No reviews yet. Be the first to review!</p>
+                {% endif %} {% endcomment %}
             </div>
             
 

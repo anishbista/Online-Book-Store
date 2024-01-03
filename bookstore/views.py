@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+
+from .forms import BookReviewForm
 from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.mail import send_mail
@@ -39,6 +41,17 @@ class BookDetailView(DetailView):
     model = Book
     template_name = "book_detail.html"
 
+    def get(self, request, *args, **kwargs):
+        book = self.get_object()
+        form = BookReviewForm()
+        # review, created = BookReview.objects.get_or_create(book=book, user=request.user)
+        context = {
+            "object": book,
+            "form": form,
+            # "review": review,
+        }
+        return render(request, "book_detail.html", context)
+
     def post(self, request, *args, **kwargs):
         book = self.get_object()
 
@@ -59,6 +72,24 @@ class BookDetailView(DetailView):
                 wishlist=user_wishlist, books=book
             )
             return HttpResponseRedirect(reverse("wishlist"))
+
+        return HttpResponseRedirect(reverse("book_detail", kwargs={"pk": book.pk}))
+
+
+class BookReviewView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        book = get_object_or_404(Book, pk=pk)
+        user = request.user
+        rating = request.POST.get("rating")
+        review_text = request.POST.get("review_text")
+
+        print(review_text)
+
+        if rating and review_text:
+            BookReview.objects.create(
+                book=book, user=user, rating=rating, review_text=review_text
+            )
+            book.update_avg_rating()
 
         return HttpResponseRedirect(reverse("book_detail", kwargs={"pk": book.pk}))
 

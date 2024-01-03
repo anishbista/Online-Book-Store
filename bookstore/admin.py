@@ -33,7 +33,12 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ["user", "total_price", "created_at"]
 
 
+@admin.register(BookReview)
+class BookReviewAdmin(admin.ModelAdmin):
+    list_display = ["book", "user", "rating"]
+
+
 admin.site.register(Book)
-admin.site.register(BookReview)
+# admin.site.register(BookReview)
 # admin.site.register(Order)
 # admin.site.register(OrderItem)
