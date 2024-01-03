@@ -1,7 +1,7 @@
 import random
 from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -111,10 +111,29 @@ class OTPConfirmation(View):
 
         if submitted_otp and stored_otp and int(submitted_otp) == stored_otp:
             del request.session["checkout_otp"]
-            return render(request, "checkout_success.html")
+            return redirect("create_order")
         else:
             error_message = "Invalid OTP. Please try again."
             return render(request, "otp_entry.html", {"error_message": error_message})
+
+
+class CreateOrder(View):
+    def get(self, request):
+        user_cart = get_object_or_404(Cart, user=request.user)
+        cart_items = CartItem.objects.filter(cart=user_cart)
+        total_price = sum(item.books.price * item.quantity for item in cart_items)
+
+        order = Order.objects.create(user=request.user, total_price=total_price)
+
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                book=item.books,
+                quantity=item.quantity,
+                price=item.books.price * item.quantity,
+            )
+        user_cart.cartitem_set.all().delete()
+        return render(request, "checkout_success.html")
 
 
 class WishlistView(LoginRequiredMixin, ListView):
