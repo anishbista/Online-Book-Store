@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-
+from django.contrib import messages
 from .forms import BookReviewForm
 from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -54,7 +54,6 @@ class BookDetailView(DetailView):
 
     def post(self, request, *args, **kwargs):
         book = self.get_object()
-
         if "add_to_cart" in request.POST:
             print(book)
             user_cart, created = Cart.objects.get_or_create(user=request.user)
@@ -85,12 +84,13 @@ class BookReviewView(LoginRequiredMixin, View):
 
         print(review_text)
 
-        if rating and review_text:
+        if not OrderItem.objects.filter(order__user=user, book=book).exists():
+            messages.error(request, "You can only review books you have ordered. ")
+        elif rating and review_text:
             BookReview.objects.create(
                 book=book, user=user, rating=rating, review_text=review_text
             )
             book.update_avg_rating()
-
         return HttpResponseRedirect(reverse("book_detail", kwargs={"pk": book.pk}))
 
 
