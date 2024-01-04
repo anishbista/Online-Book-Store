@@ -8,17 +8,32 @@
     <div class="row">
         {% if ordered_books %}
         {% for item in ordered_books %}
-        <div class="col-md-4 mb-4">
+        <div class="col-md-6 mb-6">
             <div class="card h-100">
                 <img src="{{ item.image.url }}" class="card-img-top img-fluid" alt="Book Image">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.title }}</h5>
-                    <p class="card-text">
-                        <strong>Genre:</strong> {{ item.genre }}<br>
-                        
-                    </p>
-                    <p class="card-text">{{ item.description | truncatechars:40 }}</p>
-                    <a href="{{ item.pdf.pdf_file.url }}" class="btn btn-primary" target="_blank">Read</a>
+                    <h2 class="card-title">{{ item.author }}</h5>
+                    
+                    {% comment %} <iframe src="{{ item.pdf.pdf_file.url }}" width="100%" height="600px"></iframe> {% endcomment %}
+                    <embed id="pdfEmbed" src="{{ item.pdf.pdf_file.url }}" type="application/pdf" width="100%" height="600px" target="_blank" />
+                    <a href="{{ item.pdf.pdf_file.url }}" class="btn btn-primary" target="_blank">Download PDF</a>
+                    <button class="btn btn-success" onclick="openFullscreen()">Open Fullscreen</button>
+                    <script>
+                        function openFullscreen() {
+                          const elem = document.getElementById('pdfEmbed');
+                          if (elem.requestFullscreen) {
+                            elem.requestFullscreen();
+                          } else if (elem.mozRequestFullScreen) { /* Firefox */
+                            elem.mozRequestFullScreen();
+                          } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                            elem.webkitRequestFullscreen();
+                          } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                            elem.msRequestFullscreen();
+                          }
+                        }
+                        </script>
+                    
                     <!-- Adjust 'truncatechars:100' to limit description length -->
                     {% comment %} <a href="{{book.get_absolute_url }}" class="btn btn-primary">View Detail</a> {% endcomment %}
                 </div>

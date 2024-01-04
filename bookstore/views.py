@@ -215,6 +215,7 @@ class ReadBookPDFView(LoginRequiredMixin, ListView):
         print(user_orders)
 
         ordered_books = set()
+        # Set is used so there not be two same book in collection
         for order in user_orders:
             order_items = OrderItem.objects.filter(order=order)
             # ordered_books.extend([order_items.book for order_items in order_item])
@@ -223,10 +224,10 @@ class ReadBookPDFView(LoginRequiredMixin, ListView):
         print(ordered_books)
         return ordered_books
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["ordered_books"] = self.get_queryset()
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["ordered_books"] = self.get_queryset()
+    #     return context
 
     # for item in user_orders:
     #     order_items = OrderItem.objects.filter(order=item)

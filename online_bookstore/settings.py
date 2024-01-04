@@ -56,6 +56,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+X_FRAME_OPTIONS = "SAMEORIGIN"
+# this option is used because iframe and embeded to work
 
 ROOT_URLCONF = "online_bookstore.urls"
 

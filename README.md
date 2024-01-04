@@ -37,3 +37,7 @@ Create an Online Bookstore web application using Django. The bookstore should ha
 11. Social Media Integration:
         Integrate social media buttons on the website to allow users to share their favorite books and purchases with their friends.
         Encourage users to follow the bookstore's social media accounts for updates, promotions, and book recommendations.
+12. E-book Reader Integration:
+        Allow users to read e-books purchased from the bookstore directly within the web application using an integrated e-book reader.
+13. Book of the Day/Week Notifications:
+        Send daily or weekly notifications featuring a highlighted book based on the rating of the book.
