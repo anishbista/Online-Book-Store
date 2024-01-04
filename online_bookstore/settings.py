@@ -149,9 +149,12 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_BEAT_SCHEDULE = {
     "send-weekly-notification": {
         "task": "bookstore.tasks.send_highlighted_book_notification",
-        "schedule": crontab(day_of_week="wednesday", hour=15, minute=56),
+        "schedule": crontab(day_of_week="wednesday", hour=21, minute=54),
     }
 }
+"""crontab is a utility in Unix-based operating systems used to schedule recurring tasks. In the context of Celery, crontab is a scheduling component used to define recurring task schedules within the Celery configuration.
+
+In Celery, crontab is a class provided by the celery.schedules module that allows you to define schedules for periodic tasks using a syntax similar to the Unix crontab utility."""
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
