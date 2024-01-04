@@ -1,5 +1,5 @@
 import random
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -203,3 +203,48 @@ class WishlistView(LoginRequiredMixin, ListView):
             user_wishlist = Wishlist.objects.create(user=self.request.user)
 
         return WishlistItem.objects.filter(wishlist=user_wishlist)
+
+
+class ReadBookPDFView(LoginRequiredMixin, ListView):
+    model = BookPDF
+    template_name = "read_book_pdf.html"
+    context_object_name = "ordered_books"
+
+    def get_queryset(self):
+        user_orders = Order.objects.filter(user=self.request.user)
+        print(user_orders)
+
+        ordered_books = set()
+        for order in user_orders:
+            order_items = OrderItem.objects.filter(order=order)
+            # ordered_books.extend([order_items.book for order_items in order_item])
+            for order_item in order_items:
+                ordered_books.add(order_item.book)
+        print(ordered_books)
+        return ordered_books
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["ordered_books"] = self.get_queryset()
+        return context
+
+    # for item in user_orders:
+    #     order_items = OrderItem.objects.filter(order=item)
+    #     print(item)
+    #     print(order_items)
+    #     for items in order_items:
+    #         print(items.book.title)
+    #         print(items.book.author)
+
+    # order_item = OrderItem.objects.filter(
+    #     order__user=self.request.user,
+    #     book__pdf__isnull=False,
+    # ).first()
+
+    # if order_item:
+    #     book_pdf = order_item.book.pdf
+    #     return book_pdf
+    # else:
+    #     return HttpResponse(
+    #         "You haven't ordered this book or PDF is not available."
+    #     )

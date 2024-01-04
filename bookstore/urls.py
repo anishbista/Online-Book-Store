@@ -9,4 +9,5 @@ urlpatterns = [
     path("order", CreateOrder.as_view(), name="create_order"),
     path("wishlist", WishlistView.as_view(), name="wishlist"),
     path("otp", OTPConfirmation.as_view(), name="otp_confirmation"),
+    path("read_book", ReadBookPDFView.as_view(), name="read_book"),
 ]

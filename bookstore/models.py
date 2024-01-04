@@ -42,6 +42,14 @@ class Book(models.Model):
         return reverse("book_detail", kwargs={"pk": self.pk})
 
 
+class BookPDF(models.Model):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, related_name="pdf")
+    pdf_file = models.FileField(upload_to="pdf_books/")
+
+    def __str__(self):
+        return f"PDF for {self.book.title}"
+
+
 class Cart(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,

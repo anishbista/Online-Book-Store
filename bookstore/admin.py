@@ -41,3 +41,10 @@ class BookReviewAdmin(admin.ModelAdmin):
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "avg_rating"]
+
+
+# @admin.register(BookPDF):
+# class BookPDFAdmin(admin.ModelAdmin):
+#     list_display =
+
+admin.site.register(BookPDF)

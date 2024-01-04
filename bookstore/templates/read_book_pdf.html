@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Read Books - Bookstore{% endblock title %}
+{% block content %}
+<div class="container">
+    <h2>All Books</h2>
+    {% comment %} {{ordered_books}} {% endcomment %}
+    <div class="row">
+        {% if ordered_books %}
+        {% for item in ordered_books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ item.image.url }}" class="card-img-top img-fluid" alt="Book Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">
+                        <strong>Genre:</strong> {{ item.genre }}<br>
+                        
+                    </p>
+                    <p class="card-text">{{ item.description | truncatechars:40 }}</p>
+                    <a href="{{ item.pdf.pdf_file.url }}" class="btn btn-primary" target="_blank">Read</a>
+                    <!-- Adjust 'truncatechars:100' to limit description length -->
+                    {% comment %} <a href="{{book.get_absolute_url }}" class="btn btn-primary">View Detail</a> {% endcomment %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>There are no books of such genre</p>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock content %}
